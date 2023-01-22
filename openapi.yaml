@@ -1,0 +1,182 @@
+openapi: 3.0.2
+info:
+  title: Image API
+  version: 0.0.1
+tags:
+  - name: images
+security:
+  - Token: [ ]
+paths:
+  /images:
+    get:
+      summary: Get list of Images
+      operationId: images_list
+      tags:
+        - images
+      parameters:
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - name: title
+          in: query
+          description: Search by title.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  previous:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Image'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+  /images/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get image by id
+      operationId: images_read
+      tags:
+        - images
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+components:
+  schemas:
+    Image:
+      required:
+        - article
+        - name
+        - data
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+          readOnly: true
+        title:
+          title: Title
+          type: string
+          maxLength: 255
+          minLength: 1
+        url:
+          title: Link do Image
+          type: string
+          format: uri
+          maxLength: 200
+        width:
+          title: Width of image
+          type: integer
+        height:
+          title: Height of image
+          type: integer
+    GenericError:
+      type: object
+      properties:
+        key:
+          type: string
+        msg:
+          type: string
+  parameters:
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        default: 0
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+        maximum: 1000
+  responses:
+    'DefaultErrorResponse':
+      description: Generic Error Response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/GenericError'
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/GenericError'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/GenericError'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/GenericError'
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/GenericError'
+  securitySchemes:
+    Token:
+      type: apiKey
+      name: Authorization
+      in: header
