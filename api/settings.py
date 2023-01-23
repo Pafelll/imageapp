@@ -14,18 +14,19 @@ SECRET_KEY = env("API_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("API_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.postgres",
+    "images",
 ]
 
 MIDDLEWARE = [
@@ -36,9 +37,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
-ROOT_URLCONF = "example_project.urls"
+ROOT_URLCONF = "urls"
 
-WSGI_APPLICATION = "example_project.wsgi.application"
+WSGI_APPLICATION = "wsgi.application"
 
 
 # Databases
@@ -96,8 +97,14 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+IMAGES_MAX_SIZE = 10485760  # 10MB
+MAX_PAGINATION_LIMIT = 1000
