@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 def update_name(instance, filename):
-    _, extension = filename.split('.')
+    _, extension = filename.split(".")
     return f"{instance.title}.{extension}"
 
 
@@ -13,7 +13,9 @@ class Image(models.Model):
     width = models.PositiveIntegerField()
     height = models.PositiveIntegerField()
     url = models.ImageField(upload_to=update_name)
-    created_at = models.DateTimeField(default=timezone.now, verbose_name=_("created at"))
+    created_at = models.DateTimeField(
+        default=timezone.now, verbose_name=_("created at")
+    )
 
     class Meta:
         verbose_name = _("image")
@@ -25,4 +27,3 @@ class Image(models.Model):
 
     def __str__(self):
         return self.title
-

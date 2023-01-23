@@ -37,9 +37,8 @@ class ImageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {
                     "detail": _(
-                        "Files too large. Size should not exceed %d MB." % (IMAGES_MAX_SIZE / (1024 * 1024))
+                        "Files too large. Size should not exceed %d MB."
+                        % (IMAGES_MAX_SIZE / (1024 * 1024))
                     )
                 }
             )
-
-

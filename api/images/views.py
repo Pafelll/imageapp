@@ -6,7 +6,9 @@ from .serializers import ImageSerializer
 from .models import Image
 
 
-class ImageViewSet(CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class ImageViewSet(
+    CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet
+):
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by("id")  # required for pagination
     pagination_class = LimitOffsetPagination
