@@ -50,6 +50,30 @@ paths:
           $ref: '#/components/responses/403'
         '404':
           $ref: '#/components/responses/404'
+    post:
+      summary: Create image
+      operationId: images_create
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageWrite'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+      tags:
+        - images
   /images/{id}:
     parameters:
       - name: id
@@ -81,9 +105,11 @@ components:
   schemas:
     Image:
       required:
-        - article
-        - name
-        - data
+        - id
+        - title
+        - attachment
+        - width
+        - height
       type: object
       properties:
         id:
@@ -100,6 +126,32 @@ components:
           type: string
           format: uri
           maxLength: 200
+        width:
+          title: Width of image
+          type: integer
+        height:
+          title: Height of image
+          type: integer
+    ImageWrite:
+      required:
+        - title
+        - attachment
+        - width
+        - height
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+          readOnly: true
+        title:
+          title: Title
+          type: string
+          maxLength: 255
+          minLength: 1
+        attachment:
+          type: string
+          format: binary
         width:
           title: Width of image
           type: integer
@@ -132,8 +184,7 @@ components:
       schema:
         type: integer
         format: int64
-        minimum: 1
-        maximum: 1000
+        minimum: 0
   responses:
     'DefaultErrorResponse':
       description: Generic Error Response

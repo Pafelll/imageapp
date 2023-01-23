@@ -107,4 +107,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 IMAGES_MAX_SIZE = 10485760  # 10MB
-MAX_PAGINATION_LIMIT = 1000
