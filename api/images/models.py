@@ -1,25 +1,23 @@
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 
 def update_name(instance, filename):
-    _, extension = filename.split(".")
-    return f"{instance.title}.{extension}"
+    extension = filename.split(".")[-1]
+    title = instance.title.split(".")[0]
+    return f"{title}.{extension}"
 
 
 class Image(models.Model):
-    title = models.CharField(max_length=128, verbose_name=_("title"), unique=True)
+    title = models.CharField(max_length=128, verbose_name="title", unique=True)
     width = models.PositiveIntegerField()
     height = models.PositiveIntegerField()
     url = models.ImageField(upload_to=update_name)
-    created_at = models.DateTimeField(
-        default=timezone.now, verbose_name=_("created at")
-    )
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="created at")
 
     class Meta:
-        verbose_name = _("image")
-        verbose_name_plural = _("images")
+        verbose_name = "image"
+        verbose_name_plural = "images"
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()

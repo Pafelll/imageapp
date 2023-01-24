@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Image
-from helpers import resize
+from helpers import resize, ALLOWED_IMAGE_FORMAT
 from settings import IMAGES_MAX_SIZE
 
 
@@ -25,20 +25,21 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def validate_attachment(self, attrs):
         self._validate_size(attrs)
+        self._validate_extension(attrs)
         return attrs
 
     @staticmethod
-    def _validate_content_type(attrs):
-        pass
+    def _validate_extension(attrs):
+        if attrs.name:
+            extension = attrs.name.split(".")[-1]
+            if extension.upper() not in ALLOWED_IMAGE_FORMAT:
+                raise serializers.ValidationError(
+                    f"Extension not recognized. Please use one of {ALLOWED_IMAGE_FORMAT}"
+                )
 
     @staticmethod
     def _validate_size(attrs):
         if attrs.size > IMAGES_MAX_SIZE:
             raise serializers.ValidationError(
-                {
-                    "detail": _(
-                        "Files too large. Size should not exceed %d MB."
-                        % (IMAGES_MAX_SIZE / (1024 * 1024))
-                    )
-                }
+                f"Files too large. Size should not exceed {IMAGES_MAX_SIZE / (1024 * 1024)} MB."
             )
