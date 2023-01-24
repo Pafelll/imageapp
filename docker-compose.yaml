@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=user
+      - POSTGRES_DB_NAME=user
+  api:
+    build: .
+    env_file:
+      - ./.env.example
+    command: sh -c "python api/manage.py migrate && python api/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links:
+      - db
+
