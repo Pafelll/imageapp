@@ -1,17 +1,11 @@
 import os
 import environ
 
-env = environ.Env(OPTIMA_API_DEBUG=(bool, False))
+env = environ.Env(API_DEBUG=(bool, False))
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("API_SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("API_DEBUG")
 
 ALLOWED_HOSTS = ["*"]
