@@ -4,8 +4,8 @@ info:
   version: 0.0.1
 tags:
   - name: images
-security:
-  - Token: [ ]
+servers:
+  - url: http://0.0.0.0:8000/api
 paths:
   /images:
     get:
@@ -162,9 +162,9 @@ components:
       type: object
       properties:
         key:
-          type: string
-        msg:
-          type: string
+          type: array
+          items:
+            type: string
   parameters:
     offsetParam:
       name: offset
@@ -226,8 +226,3 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/GenericError'
-  securitySchemes:
-    Token:
-      type: apiKey
-      name: Authorization
-      in: header
